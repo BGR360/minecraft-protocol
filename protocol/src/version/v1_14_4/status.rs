@@ -4,11 +4,13 @@ use crate::error::DecodeError;
 use minecraft_protocol_derive::{Decoder, Encoder};
 use std::io::Read;
 
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum StatusServerBoundPacket {
     StatusRequest,
     PingRequest(PingRequest),
 }
 
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum StatusClientBoundPacket {
     StatusResponse(StatusResponse),
     PingResponse(PingResponse),
@@ -44,7 +46,7 @@ impl StatusClientBoundPacket {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct PingRequest {
     pub time: u64,
 }
@@ -57,7 +59,7 @@ impl PingRequest {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct PingResponse {
     pub time: u64,
 }
@@ -70,7 +72,7 @@ impl PingResponse {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct StatusResponse {
     pub server_status: ServerStatus,
 }

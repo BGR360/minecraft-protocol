@@ -3,20 +3,20 @@ use crate::impl_json_encoder_decoder;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-#[derive(Clone, Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct ServerStatus {
     pub version: ServerVersion,
     pub players: OnlinePlayers,
     pub description: Message,
 }
 
-#[derive(Clone, Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct ServerVersion {
     pub name: String,
     pub protocol: u32,
 }
 
-#[derive(Clone, Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct OnlinePlayers {
     pub max: u32,
     pub online: u32,

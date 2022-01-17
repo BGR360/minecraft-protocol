@@ -3,6 +3,7 @@ use crate::error::DecodeError;
 use minecraft_protocol_derive::{Decoder, Encoder};
 use std::io::Read;
 
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum HandshakeServerBoundPacket {
     Handshake(Handshake),
 }
@@ -25,7 +26,7 @@ impl HandshakeServerBoundPacket {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct Handshake {
     #[data_type(with = "var_int")]
     pub protocol_version: i32,

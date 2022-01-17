@@ -9,12 +9,15 @@ use nbt::CompoundTag;
 use std::io::Read;
 use uuid::Uuid;
 
+#[derive(Debug, Clone, PartialEq)]
 pub enum GameServerBoundPacket {
     ServerBoundChatMessage(ServerBoundChatMessage),
     ServerBoundKeepAlive(ServerBoundKeepAlive),
     ServerBoundAbilities(ServerBoundAbilities),
 }
 
+// FIXME: Implement PartialEq on NBT types.
+#[derive(Debug, Clone /*PartialEq*/)]
 pub enum GameClientBoundPacket {
     ClientBoundChatMessage(ClientBoundChatMessage),
     JoinGame(JoinGame),
@@ -96,7 +99,7 @@ impl GameClientBoundPacket {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct ServerBoundChatMessage {
     #[data_type(max_length = 256)]
     pub message: String,
@@ -110,13 +113,13 @@ impl ServerBoundChatMessage {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct ClientBoundChatMessage {
     pub message: Message,
     pub position: MessagePosition,
 }
 
-#[derive(Encoder, Decoder, Debug, Eq, PartialEq)]
+#[derive(Encoder, Decoder, Debug, Copy, Clone, Eq, PartialEq)]
 pub enum MessagePosition {
     Chat,
     System,
@@ -131,7 +134,7 @@ impl ClientBoundChatMessage {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct JoinGame {
     pub entity_id: u32,
     pub game_mode: GameMode,
@@ -144,7 +147,7 @@ pub struct JoinGame {
     pub reduced_debug_info: bool,
 }
 
-#[derive(Encoder, Decoder, Debug, Eq, PartialEq)]
+#[derive(Encoder, Decoder, Debug, Copy, Clone, Eq, PartialEq)]
 pub enum GameMode {
     Survival = 0,
     Creative = 1,
@@ -177,7 +180,7 @@ impl JoinGame {
     }
 }
 
-#[derive(Encoder, Decoder)]
+#[derive(Encoder, Decoder, Debug, Copy, Clone, Eq, PartialEq)]
 pub struct ServerBoundKeepAlive {
     pub id: u64,
 }
@@ -190,7 +193,7 @@ impl ServerBoundKeepAlive {
     }
 }
 
-#[derive(Encoder, Decoder)]
+#[derive(Encoder, Decoder, Debug, Copy, Clone, Eq, PartialEq)]
 pub struct ClientBoundKeepAlive {
     pub id: u64,
 }
@@ -203,7 +206,8 @@ impl ClientBoundKeepAlive {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+// FIXME: Implement PartialEq on NBT types.
+#[derive(Encoder, Decoder, Debug, Clone /*PartialEq*/)]
 pub struct ChunkData {
     pub x: i32,
     pub z: i32,
@@ -239,7 +243,7 @@ impl ChunkData {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct GameDisconnect {
     pub reason: Message,
 }
@@ -252,13 +256,13 @@ impl GameDisconnect {
     }
 }
 
-#[derive(Encoder, Decoder, Debug, PartialEq)]
+#[derive(Encoder, Decoder, Debug, Clone, PartialEq)]
 pub struct BossBar {
     pub id: Uuid,
     pub action: BossBarAction,
 }
 
-#[derive(Encoder, Decoder, Debug, PartialEq)]
+#[derive(Encoder, Decoder, Debug, Clone, PartialEq)]
 pub enum BossBarAction {
     Add {
         title: Message,
@@ -283,7 +287,7 @@ pub enum BossBarAction {
     },
 }
 
-#[derive(Encoder, Decoder, Debug, PartialEq)]
+#[derive(Encoder, Decoder, Debug, Copy, Clone, Eq, PartialEq)]
 pub enum BossBarColor {
     Pink,
     Blue,
@@ -294,7 +298,7 @@ pub enum BossBarColor {
     White,
 }
 
-#[derive(Encoder, Decoder, Debug, PartialEq)]
+#[derive(Encoder, Decoder, Debug, Copy, Clone, Eq, PartialEq)]
 pub enum BossBarDivision {
     None,
     Notches6,
@@ -311,7 +315,7 @@ impl BossBar {
     }
 }
 
-#[derive(Encoder, Decoder, Debug, PartialEq)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct EntityAction {
     #[data_type(with = "var_int")]
     pub entity_id: i32,
@@ -320,7 +324,7 @@ pub struct EntityAction {
     pub jump_boost: i32,
 }
 
-#[derive(Encoder, Decoder, Debug, PartialEq)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 #[data_type(with = "var_int")]
 pub enum EntityActionId {
     StartSneaking,
@@ -334,7 +338,7 @@ pub enum EntityActionId {
     StartFlyingWithElytra,
 }
 
-#[derive(Encoder, Decoder, Debug, PartialEq)]
+#[derive(Encoder, Decoder, Debug, Clone, PartialEq)]
 pub struct ServerBoundAbilities {
     #[data_type(bitfield)]
     pub invulnerable: bool,

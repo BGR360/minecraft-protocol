@@ -6,12 +6,14 @@ use crate::decoder::Decoder;
 use crate::error::DecodeError;
 use minecraft_protocol_derive::{Decoder, Encoder};
 
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum LoginServerBoundPacket {
     LoginStart(LoginStart),
     EncryptionResponse(EncryptionResponse),
     LoginPluginResponse(LoginPluginResponse),
 }
 
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum LoginClientBoundPacket {
     LoginDisconnect(LoginDisconnect),
     EncryptionRequest(EncryptionRequest),
@@ -102,7 +104,7 @@ impl LoginClientBoundPacket {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct LoginStart {
     pub name: String,
 }
@@ -115,7 +117,7 @@ impl LoginStart {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct EncryptionResponse {
     pub shared_secret: Vec<u8>,
     pub verify_token: Vec<u8>,
@@ -132,7 +134,7 @@ impl EncryptionResponse {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct LoginPluginResponse {
     #[data_type(with = "var_int")]
     pub message_id: i32,
@@ -153,7 +155,7 @@ impl LoginPluginResponse {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct LoginDisconnect {
     pub reason: Message,
 }
@@ -166,7 +168,7 @@ impl LoginDisconnect {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct EncryptionRequest {
     #[data_type(max_length = 20)]
     pub server_id: String,
@@ -190,7 +192,7 @@ impl EncryptionRequest {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct LoginSuccess {
     #[data_type(with = "uuid_hyp_str")]
     pub uuid: Uuid,
@@ -206,7 +208,7 @@ impl LoginSuccess {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct SetCompression {
     #[data_type(with = "var_int")]
     pub threshold: i32,
@@ -220,7 +222,7 @@ impl SetCompression {
     }
 }
 
-#[derive(Encoder, Decoder, Debug)]
+#[derive(Encoder, Decoder, Debug, Clone, Eq, PartialEq)]
 pub struct LoginPluginRequest {
     #[data_type(with = "var_int")]
     pub message_id: i32,
